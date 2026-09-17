@@ -200,7 +200,7 @@ function shell({ title, description, canonical, body, schema = "" }) {
 function articlePage(a) {
   const sections = a.sections.map(([h, html], i) => `<section><h2 id="section-${i + 1}">${h}</h2>${html}</section>`).join("");
   const toc = a.sections.map(([h], i) => `<a href="#section-${i + 1}">${h}</a>`).join("");
-  const schema = `<script type="application/ld+json">${JSON.stringify({"@context":"https://schema.org","@type":"Article",headline:a.title,description:a.description,datePublished:"2026-09-17",dateModified:"2026-09-17",author:{"@type":"Organization",name:"Form First Editorial Team",url:`${base}/author`},publisher:{"@type":"Organization",name:"Form First"},mainEntityOfPage:`${base}/articles/${a.slug}`})}</script>`;
+  const schema = `<script type="application/ld+json">${JSON.stringify({"@context":"https://schema.org","@type":"Article",headline:a.title,description:a.description,datePublished:"2026-09-17",dateModified:"2026-09-17",author:{"@type":"Person",name:"Raouf Rouissa",url:`${base}/author`},publisher:{"@type":"Organization",name:"Form First"},mainEntityOfPage:`${base}/articles/${a.slug}`})}</script>`;
   return shell({title:`${a.title} | Form First`,description:a.description,canonical:`${base}/articles/${a.slug}`,schema,body:`<main id="content" class="article-wrap"><article class="article"><p class="eyebrow">${a.category}</p><h1>${a.title}</h1><p class="meta">By <a href="/author">Form First Editorial Team</a> · Reviewed September 17, 2026 · ${a.time}</p><p class="lede">${a.intro}</p><div class="safety-note"><strong>Safety note:</strong> This article provides general exercise education, not medical advice. Stop if you experience sharp pain, dizziness, chest pressure, or unusual shortness of breath.</div>${sections}<section class="sources"><h2>Editorial basis and sources</h2><p>This guide applies established resistance-training principles and conservative exercise coaching practices. General activity context is informed by the U.S. Department of Health and Human Services’ <a href="https://health.gov/our-work/nutrition-physical-activity/physical-activity-guidelines">Physical Activity Guidelines for Americans</a> and the CDC’s <a href="https://www.cdc.gov/physical-activity/php/about/index.html">physical activity guidance</a>. See our <a href="/editorial-policy">editorial policy</a> for how we research, write, review, and update content.</p></section></article><aside class="toc" aria-label="On this page"><strong>On this page</strong>${toc}<a href="/articles/">All exercise guides</a></aside></main>`});
 }
 
@@ -219,9 +219,20 @@ const pages = {
   "terms.html": shell({title:"Terms of Use | Form First",description:"Terms governing use of Form First and its educational exercise content.",canonical:`${base}/terms`,body:`<main id="content" class="page"><p class="eyebrow">Legal</p><h1>Terms of use</h1><p class="meta">Effective September 17, 2026</p><p>By using this site, you agree to these terms. If you do not agree, do not use the site.</p><h2>Educational use</h2><p>Content is general information and does not create a professional-client relationship. You are responsible for deciding whether an activity is appropriate for you and for obtaining qualified advice when needed.</p><h2>Intellectual property</h2><p>Original text, branding, layout, and graphics are owned by Form First unless otherwise stated. You may link to our pages and quote short portions with attribution, but you may not republish entire articles without written permission.</p><h2>No guarantees</h2><p>We work to keep information accurate and available but do not guarantee uninterrupted access, error-free content, or specific fitness outcomes.</p><h2>Third-party services</h2><p>The site may link to or use services operated by others. Their terms and privacy practices apply to their services.</p><h2>Changes</h2><p>We may update these terms by posting a revised effective date. Continued use after an update constitutes acceptance of the revised terms.</p></main>`})
 };
 
+function applyPublisherIdentity(html) {
+  return html
+    .replaceAll("Form First Editorial Team", "Raouf Rouissa")
+    .replaceAll("Editorial Team | Form First", "Raouf Rouissa | Form First")
+    .replaceAll("Learn about the editorial process behind Form First exercise guides.", "Learn about Raouf Rouissa, the publisher and writer behind Form First exercise guides.")
+    .replace("We create exercise guides focused on practical instruction, cautious language, and clear limits.", "Fitness writer and researcher with four years of consistent strength-training experience.")
+    .replace("About the byline", "Experience")
+    .replace("Form First currently publishes under a team byline rather than claiming credentials we have not independently documented. Our work translates established training principles into steps a general adult reader can understand and apply.", "Raouf has trained consistently for four years and researches exercise technique and sports nutrition. He translates established training principles into practical steps for a general adult audience and does not claim medical or clinical credentials.")
+    .replace('<a class="button" href="https://github.com/Adsense-gm7">Contact via our public GitHub profile</a>', '<a class="button" href="mailto:elformadz@gmail.com">elformadz@gmail.com</a>');
+}
+
 await mkdir(new URL("articles/", root), { recursive: true });
-for (const [path, html] of Object.entries(pages)) await writeFile(new URL(path, root), html, "utf8");
-for (const article of articles) await writeFile(new URL(`articles/${article.slug}.html`, root), articlePage(article), "utf8");
+for (const [path, html] of Object.entries(pages)) await writeFile(new URL(path, root), applyPublisherIdentity(html), "utf8");
+for (const article of articles) await writeFile(new URL(`articles/${article.slug}.html`, root), applyPublisherIdentity(articlePage(article)), "utf8");
 
 const urls = ["/", "/articles/", ...articles.map(a => `/articles/${a.slug}`), "/about", "/author", "/editorial-policy", "/medical-disclaimer", "/contact", "/privacy", "/terms"];
 await writeFile(new URL("sitemap.xml", root), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(path => `\n  <url><loc>${base}${path}</loc><lastmod>2026-09-17</lastmod></url>`).join("")}\n</urlset>\n`, "utf8");

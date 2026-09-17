@@ -8,7 +8,7 @@ async function walk(dir) {
     if ([".git", "node_modules"].includes(name)) continue;
     const path = join(dir, name);
     if ((await stat(path)).isDirectory()) await walk(path);
-    else if (path.endsWith(".html")) files.push(path);
+    else if (path.endsWith(".html") && !name.startsWith("google")) files.push(path);
   }
 }
 await walk(root);
