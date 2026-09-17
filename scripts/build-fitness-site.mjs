@@ -1,4 +1,5 @@
 import { mkdir, writeFile } from "node:fs/promises";
+import { extraArticles } from "./extra-articles.mjs";
 
 const root = new URL("../", import.meta.url);
 const base = "https://clear-tech-daily.vercel.app";
@@ -186,6 +187,8 @@ const articles = [
     ]
   }
 ];
+
+articles.push(...extraArticles);
 
 const nav = `<header class="site-header"><a class="brand" href="/" aria-label="Form First home"><span class="brand-mark" aria-hidden="true">FF</span><span>Form First</span></a><button class="menu" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button><nav id="primary-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/articles/">Exercise Guides</a><a href="/about">About</a><a href="/contact">Contact</a></nav></header>`;
 const footer = `<footer><div><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">FF</span><span>Form First</span></a><p>Clear, practical exercise education for everyday adults.</p></div><nav aria-label="Footer navigation"><a href="/about">About</a><a href="/author">Author</a><a href="/editorial-policy">Editorial Policy</a><a href="/medical-disclaimer">Medical Disclaimer</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav><p>© <span id="year">2026</span> Form First.</p></footer>`;

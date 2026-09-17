@@ -27,6 +27,6 @@ for (const file of files) {
   }
 }
 const sitemap = await readFile(join(root, "sitemap.xml"), "utf8");
-if ((sitemap.match(/<url>/g) ?? []).length !== 21) errors.push("sitemap must contain 21 URLs");
+if ((sitemap.match(/<url>/g) ?? []).length !== files.length) errors.push("sitemap URL count must match HTML page count");
 if (errors.length) { console.error(errors.join("\n")); process.exit(1); }
-console.log(`Validated ${files.length} HTML files, internal links, metadata, and 21 sitemap URLs.`);
+console.log(`Validated ${files.length} HTML files, internal links, metadata, and sitemap URLs.`);
