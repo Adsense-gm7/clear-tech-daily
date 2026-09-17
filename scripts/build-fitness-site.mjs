@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { extraArticles } from "./extra-articles.mjs";
 
 const root = new URL("../", import.meta.url);
-const base = "https://clear-tech-daily.vercel.app";
+const base = "https://www.elformapp.com";
 const ads = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1967880499909178" crossorigin="anonymous"></script>';
 
 const articles = [

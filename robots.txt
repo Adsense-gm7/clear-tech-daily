@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://clear-tech-daily.vercel.app/sitemap.xml
+Sitemap: https://www.elformapp.com/sitemap.xml
