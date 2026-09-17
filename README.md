@@ -1,14 +1,11 @@
-# Clear Tech Daily
+# Form First
 
-Static, dependency-free editorial website for practical digital-life guides.
+An English-language exercise education site for a U.S. audience, deployed through Vercel.
 
-## Local preview
+## Build
 
-Serve this directory with any static HTTP server. The production deployment should use the repository root with no build command.
+```powershell
+node scripts/build-fitness-site.mjs
+```
 
-## Before AdSense activation
-
-1. Replace the temporary `vercel.app` canonical URL if a custom domain is connected.
-2. Add the exact AdSense publisher ID and authorized `ads.txt` line supplied by Google.
-3. Configure Google Privacy & Messaging or another Google-certified CMP where required.
-4. Continue publishing original, reviewed articles and verify every navigation/legal link.
+The build writes static, crawlable HTML pages, article structured data, `sitemap.xml`, and `robots.txt`.
