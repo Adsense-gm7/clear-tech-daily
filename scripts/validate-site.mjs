@@ -15,6 +15,19 @@ await walk(root);
 const errors = [];
 for (const file of files) {
   const html = await readFile(file, "utf8");
+  if ((html.match(/<h1[ >]/g) ?? []).length !== 1) errors.push(`${file}: expected one primary heading`);
+  for (const [, src] of html.matchAll(/(?:src|href)="(\/assets\/[^"?#]+)(?:[?#][^"]*)?"/g)) {
+    try { await stat(join(root, src)); } catch { errors.push(`${file}: missing asset ${src}`); }
+  }
+  for (const [, anchor] of html.matchAll(/href="#([^"]+)"/g)) {
+    if (!html.includes(`id="${anchor}"`)) errors.push(`${file}: missing anchor ${anchor}`);
+  }
+  for (const [img] of html.matchAll(/<img\b[^>]*>/g)) {
+    if (!/\balt="[^"]*"/.test(img)) errors.push(`${file}: image needs alt text`);
+  }
+  for (const [, json] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    try { JSON.parse(json); } catch { errors.push(`${file}: invalid structured data`); }
+  }
   for (const required of ['lang="en-US"', '<meta name="description"', '<link rel="canonical"', 'id="content"']) {
     if (!html.includes(required)) errors.push(`${file}: missing ${required}`);
   }
